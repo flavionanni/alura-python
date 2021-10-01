@@ -1,3 +1,4 @@
+import random
 
 def jogar():
 
@@ -5,15 +6,26 @@ def jogar():
     print("***Bem vindo no jogo da Forca***")
     print("********************************")
 
-    palavra_secreta = "flavio".upper()
+    
+    with open("forca/palavra.txt", "r") as arquivo:
 
-    escopo_palavra = [' _ ', ' _ ', ' _ ', ' _ ', ' _ ', ' _ ']
+        palavras = []
+
+        for palavra in arquivo:
+            palavra = palavra.strip() # tira qualquer espaço entre as palavras, inclusive o \n
+            palavras.append(palavra) #adiciona cada palavra em um list
+    
+    numero = random.randrange(0, len(palavras)) # A variavel número recebe um valor aleatório para depois ser o index da list
+
+    palavra_secreta = palavras[numero].upper() # Dado o número aleatório, ele busca uma palavra na posição do número.
+
+    escopo_palavra = ["_" for letra in palavra_secreta]
 
     print(escopo_palavra)
 
     enforcou = False
     acertou = False
-    erros = 0
+    tentativas = len(palavra_secreta)
 
     while(not enforcou and not acertou):
         chute_usuario = input("Digite uma letra:").strip().upper()
@@ -27,12 +39,15 @@ def jogar():
                 index = index + 1
 
         else:
-            erros += 1
+            tentativas -= 1
+            if tentativas != 0 : 
+                print(f"Você ainda tem {tentativas} tentativas antes de ser enforcado.")
+
 
         print(escopo_palavra)
 
-        enforcou = erros == 6
-        acertou = " _ " not in escopo_palavra
+        enforcou = tentativas == 0
+        acertou = "_" not in escopo_palavra
 
     if(acertou):
         print("Você ganhou !!")
