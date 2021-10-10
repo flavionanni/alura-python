@@ -14,25 +14,41 @@ class Conta:
         self.__saldo += valor
 
     def sacar(self, valor):
-        self.__saldo -= valor
+        if(self.__pode_sacar(valor)):
+            self.__saldo -= valor
+        else:
+            print("Transação não autorizada! Sem saldo")
 
     def transferir(self, valor, destino):
         self.sacar(valor)
         destino.depositar(valor)
 
-    # Gets and Setters
+    def __pode_sacar(self,valor_a_sacar):
+        valor_disponivel_para_sacar = self.__saldo + self.__limite
+        return valor_a_sacar <= valor_disponivel_para_sacar 
 
-    def get_numero(self):
+
+    # Gets and Setters
+    @property
+    def numero(self):
         return self.__numero
 
-    def get_titular(self):
+    @property
+    def titular(self):
         return self.__titular
 
-    def get_saldo(self):
+    @property
+    def saldo(self):
         return self.__saldo
 
-    def get_limite(self):
+    @property
+    def limite(self):
         return self.__limite
 
-    def setter_(self, limite):
+    @limite.setter
+    def limite(self, limite):
         self.__limite = limite
+
+    @staticmethod
+    def codigo_banco():
+        return "001"
